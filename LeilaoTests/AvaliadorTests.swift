@@ -3,7 +3,7 @@
 //  LeilaoTests
 //
 //  Created by Denis Carlos Lopes da Silva on 15/07/21.
-//  Copyright © 2021 Alura. All rights reserved.
+//  Copyright © 2021 DenisLopes. All rights reserved.
 //
 
 import XCTest

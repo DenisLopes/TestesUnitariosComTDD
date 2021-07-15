@@ -2,7 +2,7 @@
 //  Usuario.swift
 //  Leilao
 //
-//  Created by Ândriu Coelho on 15/07/21.
+//  Created by Denis Carlos Lopes da Silva on 15/07/21.
 //  Copyright © 2021 DenisLopes. All rights reserved.
 //
 
@@ -17,4 +17,16 @@ class Usuario {
         self.id = id
         self.nome = nome
     }
+}
+
+extension Usuario:Equatable {
+    static func == (lhs: Usuario, rhs: Usuario) -> Bool {
+        
+        if lhs.id != rhs.id || lhs.nome != rhs.nome {
+            return false
+        }
+        return true
+    }
+    
+    
 }

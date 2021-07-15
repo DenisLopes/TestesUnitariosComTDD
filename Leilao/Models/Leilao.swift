@@ -2,7 +2,7 @@
 //  Leilao.swift
 //  Leilao
 //
-//  Created by Ândriu Coelho on 15/07/21.
+//  Created by Denis Carlos Lopes da Silva on 15/07/21.
 //  Copyright © 2021 DenisLopes. All rights reserved.
 //
 
@@ -21,6 +21,14 @@ class Leilao {
     }
     
     func propoe(lance:Lance) {
-        lances?.append(lance)
+        guard let listaDeLanches = lances else { return }
+        if listaDeLanches.count == 0 || ultimoLance(listaDeLanches).usuario != lance.usuario {
+            lances?.append(lance)
+        }
+        
+    }
+    
+    private func ultimoLance(_ lances:[Lance]) -> Lance {
+        return lances[lances.count-1]
     }
 }
