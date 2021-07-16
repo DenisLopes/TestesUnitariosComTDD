@@ -21,14 +21,31 @@ class Leilao {
     }
     
     func propoe(lance:Lance) {
-        guard let listaDeLanches = lances else { return }
-        if listaDeLanches.count == 0 || ultimoLance(listaDeLanches).usuario != lance.usuario {
+        guard let listaDeLances = lances else { return }
+        if listaDeLances.count == 0 || podeDarLance(lance.usuario, listaDeLances) {
             lances?.append(lance)
         }
         
     }
     
+    private func podeDarLance(_ usuario: Usuario, _ listaDeLances:[Lance]) -> Bool {
+        return ultimoLance(listaDeLances).usuario != usuario && quantidadeLancesDoUsuarios(usuario) < 5
+    }
+    
     private func ultimoLance(_ lances:[Lance]) -> Lance {
         return lances[lances.count-1]
     }
+    
+    private func quantidadeLancesDoUsuarios(_ usuario: Usuario) -> Int {
+        guard let listaDeLanches = lances else { return 0 }
+        
+        var total = 0
+        for lanceAtual in listaDeLanches {
+            if lanceAtual.usuario == usuario {
+                total += 1
+            }
+        }
+        return total
+    }
+    
 }

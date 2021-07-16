@@ -11,8 +11,20 @@ import XCTest
 
 class LeilaoTests: XCTestCase {
     
+    private var joao: Usuario!
+    private var maria: Usuario!
+    private var pedro: Usuario!
+    private var joana: Usuario!
+    
+    
     override func setUp() {
         super.setUp()
+        
+        joao = Usuario(nome: "joao")
+        maria = Usuario(nome: "maria")
+        pedro = Usuario(nome: "pedro")
+        joana = Usuario(nome: "joana")
+        
     }
     
     override func tearDown() {
@@ -20,26 +32,19 @@ class LeilaoTests: XCTestCase {
     }
     
     func testReceberUmLance() {
+        let leilaos = Leilao(descricao: "Iphone 12 Pro")
+        XCTAssertEqual(0, leilaos.lances?.count)
         
-        let leilao = Leilao(descricao: "Iphone 12 Pro")
-        XCTAssertEqual(0, leilao.lances?.count)
-        
-        let joao = Usuario(nome: "joao")
-        leilao.propoe(lance: Lance(joao, 7000.0))
+        let leilao = CriarLeilao().para(descricao: "Iphone 12 Pro").lance(joao, 7000.0).construi()
         
         XCTAssertEqual(1, leilao.lances?.count)
         XCTAssertEqual(7000.0, leilao.lances?.first?.valor)
     }
     
     func testReceberVariosLances() {
-        
-        let leilao = Leilao(descricao: "Carro")
-        
-        let maria = Usuario(nome: "maria")
-        leilao.propoe(lance: Lance(maria, 10000.0))
-        
-        let pedro = Usuario(nome: "pedro")
-        leilao.propoe(lance: Lance(pedro, 20000.0))
+        let leilao = CriarLeilao().para(descricao: "Carro")
+            .lance(maria, 10000.0)
+            .lance(pedro, 20000.0).construi()
         
         XCTAssertEqual(2, leilao.lances?.count)
         XCTAssertEqual(10000.0, leilao.lances?.first?.valor)
@@ -48,16 +53,37 @@ class LeilaoTests: XCTestCase {
     }
     
     func testIgnorarDoislancesSeguidosDoMesmoUsuarios() {
-        
-        let leilao = Leilao(descricao: "TV Sansung")
-        
-        let joana = Usuario(nome: "joana")
-        leilao.propoe(lance: Lance(joana, 10000.0))
-        leilao.propoe(lance: Lance(joana, 110000.0))
+        let leilao = CriarLeilao().para(descricao: "TV Sansung")
+            .lance(joana, 10000.0)
+            .lance(joana, 110000.0).construi()
         
         XCTAssertEqual(1, leilao.lances?.count)
         XCTAssertEqual(10000.0, leilao.lances?.first?.valor)
+    }
+    
+    func testIgnorarMaisDe5LancesPorUsuarios() {
+        let leilao = CriarLeilao().para(descricao: "MacBook")
+            .lance(joao, 1000.0)
+            .lance(joana, 2000.0)
+            
+            .lance(joao, 3000.0)
+            .lance(joana, 4000.0)
+            
+            .lance(joao, 5000.0)
+            .lance(joana, 6000.0)
+            
+            .lance(joao, 7000.0)
+            .lance(joana, 8000.0)
+            
+            .lance(joao, 9000.0)
+            .lance(joana, 10000.0).construi()
+            
         
+        _ = CriarLeilao().para(descricao: "MacBook")
+            .lance(joao, 1000.0).construi()
+        
+        XCTAssertEqual(10, leilao.lances?.count)
+        XCTAssertEqual(10000.0, leilao.lances?.last?.valor)
     }
     
 }
